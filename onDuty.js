@@ -50,7 +50,7 @@ const puppeteer = require('puppeteer');
   // console.log('Dimensions:', dimensions);
 
 
-  await page.screenshot({path: 'result.png'});
+  await page.screenshot({path: './screenshots/result.png'});
 
   await browser.close().then(() => {
     console.log('[6/6] 🙆‍♂  打卡完成!!!')
