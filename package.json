@@ -1,0 +1,13 @@
+{
+  "name": "onDutyJs",
+  "version": "1.0.0",
+  "description": "onDuty for tubeHR",
+  "author": "Phantasweng <bensonuong@gmail.com>",
+  "scripts": {
+    "onDuty": "node onDuty.js"
+  },
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "puppeteer": "^1.6.1"
+  }
+}
