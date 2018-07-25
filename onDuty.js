@@ -18,7 +18,7 @@ const puppeteer = require('puppeteer');
 
   await page.goto(loginUrl, { waitUntil: 'networkidle2' })
 
-  console.log('[3/6] 🧐  輸入帳密')
+  console.log('[2/6] 🧐  輸入帳密')
   console.log('└─ userName: ' + process.env.userName)
   console.log('└─ password: 不告訴你')
   await page.type('input[name="userName"]', process.env.userName);
@@ -27,7 +27,7 @@ const puppeteer = require('puppeteer');
   await page.on('response', response => {
     if (response.url().endsWith('Token') === true) {
       if (response._status === 200) {
-        console.log('[2/6] 🤨  登入成功')
+        console.log('[3/6] 🤨  登入成功')
       }
     }
   });
@@ -53,6 +53,6 @@ const puppeteer = require('puppeteer');
   await page.screenshot({path: 'result.png'});
 
   await browser.close().then(() => {
-    console.log('[6/6] 🙆‍♂  登入完成!!!')
+    console.log('[6/6] 🙆‍♂  打卡完成!!!')
   });
 })();
