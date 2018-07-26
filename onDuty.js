@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer');
 const dateFns = require('date-fns');
 
 (async () => {
-  console.log('[1/6] 👻  開始自動打卡')
+  console.log('[1/7] 👻  開始自動打卡')
   const browser = await puppeteer.launch({
     headless: false,
     devtools: true,
@@ -21,7 +21,7 @@ const dateFns = require('date-fns');
 
   await page.goto(loginUrl, { waitUntil: 'networkidle2' })
 
-  console.log('[2/6] 🧐  輸入帳密')
+  console.log('[2/7] 🧐  輸入帳密')
   console.log('└─ userName: ' + process.env.userName)
   console.log('└─ password: 不告訴你')
   await page.type('input[name="userName"]', process.env.userName);
@@ -30,25 +30,25 @@ const dateFns = require('date-fns');
   await page.on('response', response => {
     if (response.url().endsWith('Token') === true) {
       if (response._status === 200) {
-        console.log('[3/6] 🤨  登入成功')
+        console.log('[3/7] 🤨  登入成功')
       }
     }
   });
   await navigationPromise;
 
-  console.log('[4/6] 🤳  開啟: 我要打卡')
+  console.log('[4/7] 🤳  開啟: 我要打卡')
   await page.waitForSelector(menuBtn);
   await page.click(menuBtn);
 
   // 上班
   if(dateFns.format(new Date, 'HH') < 12) {
-    console.log('[5/6] 😏  點擊: 上班')
+    console.log('[5/7] 😏  點擊: 上班')
     await page.waitForSelector(onDutyBtn);
     await page.click(onDutyBtn);
     await page.on('response', response => {
       if (response.url().endsWith('GetWithReason') === true) {
         if (response._status === 200) {
-          console.log('[6/6] 🤨  打卡成功')
+          console.log('[6/7] 🤨  打卡成功')
         }
       }
       if (response.url().endsWith('web') === true) {
@@ -61,13 +61,13 @@ const dateFns = require('date-fns');
 
   // 下班
   if(dateFns.format(new Date, 'HH') > 17) {
-    console.log('[5/6] 😏  點擊: 下班')
+    console.log('[5/7] 😏  點擊: 下班')
     await page.waitForSelector(onDutyBtn);
     await page.click(onDutyBtn);
     await page.on('response', response => {
       if (response.url().endsWith('GetWithReason') === true) {
         if (response._status === 200) {
-          console.log('[6/6] 🤨  打卡成功')
+          console.log('[6/7] 🤨  打卡成功')
         }
       }
       if (response.url().endsWith('web') === true) {
@@ -91,6 +91,6 @@ const dateFns = require('date-fns');
   await page.screenshot({path: './screenshots/' + dateFns.format(new Date, 'YYYY-MM-DD HH:mm:ss') + '.jpg'});
 
   await browser.close().then(() => {
-    console.log('[6/6] 🙆‍♂  打卡完成!!!')
+    console.log('[7/7] 🙆‍♂  打卡完成!!!')
   });
 })();
