@@ -1,12 +1,14 @@
 require('dotenv').config();
 const puppeteer = require('puppeteer');
+const dateFns = require('date-fns');
 
 (async () => {
   console.log('[1/6] 👻  開始自動打卡')
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
+    devtools: true,
     // args: ['--window-size=400,700', '--no-sandbox'],
-    slowMo: 0,
+    slowMo: 20,
   });
   const page = await browser.newPage();
   await page.setViewport({width: 400, height: 720});
@@ -14,7 +16,8 @@ const puppeteer = require('puppeteer');
 
   const loginUrl = 'https://auth.mayohr.com/HRM/Account/Login?original_target=https%3A%2F%2Fhrm.mayohr.com%2Fta&lang=undefined'
   const menuBtn = '.ta-link-item[data-reactid=".0.0.1.2.0.1.1.1.0.1.2"]';
-  const onDutyBtn = '.ta_btn_cancel[data-reactid=".0.0.1.2.0.1.1.1.5.0.1.0.1.0.2"]';
+  const onDutyBtn = '.ta_btn_cancel[data-reactid=".0.0.1.2.0.1.1.1.5.0.1.0.1.0.0"]';
+  const offWorkBtn = '.ta_btn_cancel[data-reactid=".0.0.1.2.0.1.1.1.5.0.1.0.1.0.2"]';
 
   await page.goto(loginUrl, { waitUntil: 'networkidle2' })
 
@@ -37,9 +40,45 @@ const puppeteer = require('puppeteer');
   await page.waitForSelector(menuBtn);
   await page.click(menuBtn);
 
-  console.log('[5/6] 😏  點擊: 上班')
-  await page.waitForSelector(onDutyBtn);
-  await page.click(onDutyBtn);
+  // 上班
+  if(dateFns.format(new Date, 'HH') < 12) {
+    console.log('[5/6] 😏  點擊: 上班')
+    await page.waitForSelector(onDutyBtn);
+    await page.click(onDutyBtn);
+    await page.on('response', response => {
+      if (response.url().endsWith('GetWithReason') === true) {
+        if (response._status === 200) {
+          console.log('[6/6] 🤨  打卡成功')
+        }
+      }
+      if (response.url().endsWith('web') === true) {
+        response.json().then(function (textBody) {
+          console.log(textBody.Data.punchDate);
+        })
+      }
+    });
+  }
+
+  // 下班
+  if(dateFns.format(new Date, 'HH') > 17) {
+    console.log('[5/6] 😏  點擊: 下班')
+    await page.waitForSelector(onDutyBtn);
+    await page.click(onDutyBtn);
+    await page.on('response', response => {
+      if (response.url().endsWith('GetWithReason') === true) {
+        if (response._status === 200) {
+          console.log('[6/6] 🤨  打卡成功')
+        }
+      }
+      if (response.url().endsWith('web') === true) {
+        response.json().then(function (textBody) {
+          console.log(textBody.Data.punchDate);
+        })
+      }
+    });
+  }
+
+
   // const dimensions = await page.evaluate(() => {
   //   return {
   //     width: document.documentElement.clientWidth,
@@ -49,8 +88,7 @@ const puppeteer = require('puppeteer');
   // });
   // console.log('Dimensions:', dimensions);
 
-
-  await page.screenshot({path: './screenshots/result.png'});
+  await page.screenshot({path: './screenshots/' + dateFns.format(new Date, 'YYYY-MM-DD HH:mm:ss') + '.jpg'});
 
   await browser.close().then(() => {
     console.log('[6/6] 🙆‍♂  打卡完成!!!')

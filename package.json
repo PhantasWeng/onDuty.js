@@ -7,6 +7,7 @@
     "onDuty": "node onDuty.js"
   },
   "dependencies": {
+    "date-fns": "^1.29.0",
     "dotenv": "^6.0.0",
     "puppeteer": "^1.6.1"
   }
