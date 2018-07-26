@@ -22,8 +22,8 @@ const dateFns = require('date-fns');
   await page.goto(loginUrl, { waitUntil: 'networkidle2' })
 
   console.log('[2/7] 🧐  輸入帳密')
-  console.log('└─ userName: ' + process.env.userName)
-  console.log('└─ password: 不告訴你')
+  console.log(' └─ userName: ' + process.env.userName)
+  console.log(' └─ password: ' + '*'.repeat(process.env.password.length))
   await page.type('input[name="userName"]', process.env.userName);
   await page.type('input[name="password"]', process.env.password);
   await page.click('button[type="submit"]');
@@ -36,9 +36,9 @@ const dateFns = require('date-fns');
   });
   await navigationPromise;
 
-  console.log('[4/7] 🤳  開啟: 我要打卡')
   await page.waitForSelector(menuBtn);
   await page.click(menuBtn);
+  console.log('[4/7] 🤳  開啟: 我要打卡')
 
   // 上班
   if(dateFns.format(new Date, 'HH') < 12) {
@@ -48,12 +48,12 @@ const dateFns = require('date-fns');
     await page.on('response', response => {
       if (response.url().endsWith('GetWithReason') === true) {
         if (response._status === 200) {
-          console.log('[6/7] 🤨  打卡成功')
+          console.log('[6/7] 😈   打卡成功')
         }
       }
       if (response.url().endsWith('web') === true) {
         response.json().then(function (textBody) {
-          console.log(textBody.Data.punchDate);
+          console.log(' └─ [下班] 打卡時間: ' + textBody.Data.punchDate);
         })
       }
     });
@@ -67,12 +67,12 @@ const dateFns = require('date-fns');
     await page.on('response', response => {
       if (response.url().endsWith('GetWithReason') === true) {
         if (response._status === 200) {
-          console.log('[6/7] 🤨  打卡成功')
+          console.log('[6/7] 😈   打卡成功')
         }
       }
       if (response.url().endsWith('web') === true) {
         response.json().then(function (textBody) {
-          console.log(textBody.Data.punchDate);
+          console.log(' └─ [上班] 打卡時間: ' + textBody.Data.punchDate);
         })
       }
     });
