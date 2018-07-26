@@ -5,10 +5,10 @@ const dateFns = require('date-fns');
 (async () => {
   console.log('[1/7] 👻  開始自動打卡')
   const browser = await puppeteer.launch({
-    headless: false,
-    devtools: true,
+    // headless: false,
+    // devtools: true,
     // args: ['--window-size=400,700', '--no-sandbox'],
-    slowMo: 20,
+    slowMo: 0,
   });
   const page = await browser.newPage();
   await page.setViewport({width: 400, height: 720});
