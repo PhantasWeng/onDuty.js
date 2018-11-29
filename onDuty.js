@@ -6,10 +6,10 @@ const dateFns = require('date-fns');
 const colors = require('colors');
 
 program
-  .version('0.1.0')
-  .option('-p, --punch [value]', '指定特定的動作: 請假(開發中)')
-  .option('-d, --devtools [value]', '開啟devtool')
-  .option('-w, --watch [value]', '察看UI介面')
+  .version('onDuty.js: Version 0.1.0')
+  .option('-p, --punch [type]', '[開發中] 指定特定的動作: 打卡, 休息, 請假')
+  .option('-d, --devtools', '開啟 devtool')
+  .option('-w, --watch', '察看 UI 介面')
 
   program.on('--help', function(){
   console.log('')
@@ -86,7 +86,6 @@ program
   await page.waitForSelector(dutyBtn);
   await page.click(dutyBtn);
 
-  const finalResponse = 'undefined'
   const waitResult = async res => {
     try {
       await page.waitForResponse( response => {
