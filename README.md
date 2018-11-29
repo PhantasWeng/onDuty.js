@@ -1,5 +1,8 @@
 # onDuty.js
 
+### DEMO
+![Demo Image](demo.png)
+
 ### Install
 1. Install dependencies package
 `npm install` or `yarn install`
