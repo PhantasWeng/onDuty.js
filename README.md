@@ -10,4 +10,7 @@
 
 
 ### Run
-Command: `npm run onDuty`
+Command: `npm run start` or enter command `npm run` to list all options.
+
+### Help
+Enter `npm run start --help` to list argv.
