@@ -103,7 +103,7 @@ program
           })
           return true
         }
-      }, {timeout: 1000});
+      }, {timeout: 10000});
     } catch (e) {
       if (e instanceof TimeoutError) {
         // Do something if this is a timeout.
