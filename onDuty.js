@@ -86,24 +86,31 @@ program
   await page.waitForSelector(dutyBtn);
   await page.click(dutyBtn);
 
-  const waitResult = async res => {
+  const waitResult = async (result) => {
     try {
-      await page.waitForResponse( response => {
-        if (response.url().endsWith('GetWithReason') === true) {
-          if (response._status === 200) {
-            console.log('[6/7] 🎉   ' + myPunchType + '打卡成功')
+      const finalResponse = await page.waitForResponse( response => {
+        if (response.url().endsWith('web') && response.request().method() === 'POST') {
+          if (response.status() === 200) {
+            return response.json().then( text => {
+              // punchType: 1 上班
+              // punchType: 2 下班
+              // punchDate 打卡時間
+              // LocationName 打卡地點
+              let myPunchType = ''
+              if (text.Data.punchType === 1) { myPunchType = '上班' }
+              if (text.Data.punchType === 2) { myPunchType = '下班' }
+              console.log('[6/7] 🎉   ' + '打卡成功 @ ' + text.Data.LocationName)
+              console.log(' └─ [' + myPunchType + '] 打卡時間: ' + dateFns.format(text.Data.punchDate,  'YYYY-MM-DD HH:MM:SS'))
+            })
+          } else {
+            console.log()
+            response.json().then( text => {
+              console.log('🚧  ' + response.status() + ': ' + colors.red(text.Error.Title))
+            })
           }
         }
-        if (response.url().endsWith('web') === true) {
-          response.json().then(function (textBody) {
-            let myPunchType
-            if (textBody.Data.punchType == 1) myPunchType = '上班'
-            if (textBody.Data.punchType == 2) myPunchType = '下班'
-            console.log(' └─ [' + myPunchType + '] 打卡時間: ' + dateFns.format(textBody.Data.punchDate,  'YYYY-MM-DD HH:MM:SS'));
-          })
-          return true
-        }
-      }, {timeout: 10000});
+      }, {timeout: 10000})
+      return finalResponse.ok()
     } catch (e) {
       if (e instanceof TimeoutError) {
         // Do something if this is a timeout.
@@ -122,6 +129,7 @@ program
   // });
   // console.log('Dimensions:', dimensions);
   waitResult().then( async res => {
+    console.log('RESSSS', res)
     if (res === true) {
       await page.screenshot({path: './screenshots/' + dateFns.format(new Date, 'YYYY-MM-DD HH:mm:ss') + '.jpg'});
       if (!program.devtools) {
