@@ -100,21 +100,26 @@ program
               if (text.Data.punchType === 1) { myPunchType = '上班' }
               if (text.Data.punchType === 2) { myPunchType = '下班' }
               console.log('[6/7] 🎉   ' + '打卡成功 @ ' + text.Data.LocationName)
-              console.log(' └─ [' + myPunchType + '] 打卡時間: ' + dateFns.format(text.Data.punchDate,  'YYYY-MM-DD HH:MM:SS'))
+              console.log(' └─ [' + myPunchType + '] 打卡時間: ' + dateFns.format(text.Data.punchDate,  'YYYY-MM-DD HH:mm:ss'))
             })
           } else {
-            console.log()
-            response.json().then( text => {
-              console.log('🚧  ' + response.status() + ': ' + colors.red(text.Error.Title))
+            return response.json().then( text => {
+              console.log('[6/7] 🚧  ' + response.status() + ': ' + text.Error.Title)
             })
           }
         }
       }, {timeout: 10000})
-      return finalResponse.ok()
+      if (finalResponse.ok()) {
+        return finalResponse.ok()
+      } else {
+        let msg = ''
+        await finalResponse.json().then(text => msg = text.Error.Title)
+        return finalResponse.status() + ': ' + msg
+      }
     } catch (e) {
       if (e instanceof TimeoutError) {
         // Do something if this is a timeout.
-        console.log('[6/7] 🚧  ' + '打卡失敗: ' + dateFns.format(Date.now(),  'YYYY-MM-DD HH:MM:SS'))
+        console.log('[6/7] 🚧  ' + '打卡失敗: ' + dateFns.format(Date.now(),  'YYYY-MM-DD HH:mm:ss'))
         return e.message
       }
     }
@@ -129,7 +134,6 @@ program
   // });
   // console.log('Dimensions:', dimensions);
   waitResult().then( async res => {
-    console.log('RESSSS', res)
     if (res === true) {
       await page.screenshot({path: './screenshots/' + dateFns.format(new Date, 'YYYY-MM-DD HH:mm:ss') + '.jpg'});
       if (!program.devtools) {
