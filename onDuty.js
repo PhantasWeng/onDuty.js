@@ -5,20 +5,25 @@ const { TimeoutError } = require('puppeteer/Errors')
 const dateFns = require('date-fns');
 const colors = require('colors');
 
+let useEnv = true
+let userName = useEnv ? process.env.userName : myConfig.userName
+let password = useEnv ? '*'.repeat(process.env.password.length) : myConfig.password
+let loginUrl = useEnv ? process.env.loginUrl : myConfig.loginUrl
+
 program
   .version('onDuty.js: Version 0.1.0')
   .option('-p, --punch [type]', '[開發中] 指定特定的動作: 打卡, 休息, 請假')
   .option('-d, --devtools', '開啟 devtool')
   .option('-w, --watch', '察看 UI 介面')
 
-  program.on('--help', function(){
-  console.log('')
-  console.log(`${colors.yellow('env 目前設定:')}
-  userName = ${colors.green(process.env.userName)}
-  password = ${colors.green('*'.repeat(process.env.password.length))}
-  loginUrl = ${colors.green(process.env.loginUrl)}
-  `)
-  });
+  // program.on('--help', function(){
+  // console.log('')
+  // console.log(`${colors.yellow('env 目前設定:')}
+  // userName = ${colors.green(userName)}
+  // password = ${colors.green(password)}
+  // loginUrl = ${colors.green(loginUrl)}
+  // `)
+  // });
   if(!process.argv.slice(2).length) {
     program.outputHelp(text => colors.grey(text));
   }
@@ -38,8 +43,19 @@ program
     console.log('')
   }
 
-(async () => {
+function setConfig (data) {
+  useEnv = false
+  userName = data.userName
+  password = data.password
+  loginUrl = data.loginUrl
+}
 
+const punchDuty = async () => {
+  console.log(`${colors.yellow('env 目前設定:')}
+  userName = ${colors.green(userName)}
+  password = ${colors.green('*'.repeat(password.length))}
+  loginUrl = ${colors.green(loginUrl)}
+  `)
   const launchOptions = {
     headless: program.watch ? false : true,
     devtools: program.devtools ? true : false,
@@ -60,13 +76,13 @@ program
   const menuBtn = 'a.link-item__link[href$="ta?id=webpunch"]';
   const dutyBtn = '.new-window-body > div > div > div:nth-child(1) > button';
 
-  await page.goto(process.env.loginUrl, { waitUntil: 'networkidle2' })
+  await page.goto(loginUrl, { waitUntil: 'networkidle2' })
 
   console.log('[2/7] ⚡️  輸入帳密')
-  console.log(' └─ userName: ' + process.env.userName)
-  console.log(' └─ password: ' + '*'.repeat(process.env.password.length))
-  await page.type('input[name="userName"]', process.env.userName);
-  await page.type('input[name="password"]', process.env.password);
+  console.log(' └─ userName: ' + userName)
+  console.log(' └─ password: ' + '*'.repeat(password.length))
+  await page.type('input[name="userName"]', userName);
+  await page.type('input[name="password"]', password);
   await page.click('button[type="submit"]');
   await page.on('response', response => {
     if (response.url().endsWith('Token') === true) {
@@ -151,4 +167,12 @@ program
       console.log('')
     }
   })
-})()
+}
+
+
+if ('require', require.main === module) {
+  punchDuty()
+}
+
+module.exports.start = punchDuty
+module.exports.config = setConfig
