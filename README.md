@@ -27,3 +27,6 @@ Enter `npm run start --help` or `yarn start --help` to list argv.
 -d, --devtools: 開啟 devtool
 -w, --watch: 察看 UI 介面
 ```
+
+### Usage
+[onDutySchedule](https://github.com/PhantasWeng/onDutySchedule)
