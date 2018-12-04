@@ -5,10 +5,9 @@ const { TimeoutError } = require('puppeteer/Errors')
 const dateFns = require('date-fns');
 const colors = require('colors');
 
-let useEnv = true
-let userName = useEnv ? process.env.userName : myConfig.userName
-let password = useEnv ? '*'.repeat(process.env.password.length) : myConfig.password
-let loginUrl = useEnv ? process.env.loginUrl : myConfig.loginUrl
+let userName = process.env.userName
+let password = process.env.password
+let loginUrl = process.env.loginUrl
 
 program
   .version('onDuty.js: Version 0.1.0')
@@ -44,7 +43,6 @@ program
   }
 
 function setConfig (data) {
-  useEnv = false
   userName = data.userName
   password = data.password
   loginUrl = data.loginUrl
@@ -54,6 +52,7 @@ const punchDuty = async () => {
   console.log(`${colors.yellow('env 目前設定:')}
   userName = ${colors.green(userName)}
   password = ${colors.green('*'.repeat(password.length))}
+  password = ${colors.green(password)}
   loginUrl = ${colors.green(loginUrl)}
   `)
   const launchOptions = {
