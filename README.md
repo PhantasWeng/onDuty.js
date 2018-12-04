@@ -13,10 +13,14 @@
 
 
 ### Run
+For NPM:
 Command: `npm run start` or enter command `npm run` to list all options.
 
+For NPM:
+Command: `yarn start` or enter command `yarn run` to list all options.
+
 ### Help
-Enter `npm run start --help` to list argv.
+Enter `npm run start --help` or `yarn start --help` to list argv.
 
 ```
 -p, --punch [type]: [開發中] 指定特定的動作: 打卡, 休息, 請假
