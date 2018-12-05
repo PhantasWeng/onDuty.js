@@ -49,6 +49,11 @@ function setConfig (data) {
 }
 
 const punchDuty = async () => {
+  var punchResult = {
+    status: null,
+    msg: '',
+    time: ''
+  }
   console.log(`${colors.yellow('env 目前設定:')}
   userName = ${colors.green(userName)}
   password = ${colors.green('*'.repeat(password.length))}
@@ -116,6 +121,9 @@ const punchDuty = async () => {
               if (text.Data.punchType === 2) { myPunchType = '下班' }
               console.log('[6/7] 🎉   ' + '打卡成功 @ ' + text.Data.LocationName)
               console.log(' └─ [' + myPunchType + '] 打卡時間: ' + dateFns.format(text.Data.punchDate,  'YYYY-MM-DD HH:mm:ss'))
+              punchResult.status = true
+              punchResult.msg = '[' + myPunchType + '] 打卡成功'
+              punchResult.time = dateFns.format(text.Data.punchDate,  'YYYY-MM-DD HH:mm:ss')
             })
           } else {
             return response.json().then( text => {
@@ -135,6 +143,9 @@ const punchDuty = async () => {
       if (e instanceof TimeoutError) {
         // Do something if this is a timeout.
         console.log('[6/7] 🚧  ' + '打卡失敗: ' + dateFns.format(Date.now(),  'YYYY-MM-DD HH:mm:ss'))
+        punchResult.status = false
+        punchResult.msg = '打卡失敗'
+        punchResult.time = dateFns.format(Date.now(),  'YYYY-MM-DD HH:mm:ss')
         return e.message
       }
     }
@@ -148,7 +159,7 @@ const punchDuty = async () => {
   //   };
   // });
   // console.log('Dimensions:', dimensions);
-  waitResult().then( async res => {
+  return await waitResult().then( async res => {
     if (res === true) {
       await page.screenshot({path: './screenshots/' + dateFns.format(new Date, 'YYYY-MM-DD HH:mm:ss') + '.jpg'});
       if (!program.devtools) {
@@ -157,6 +168,7 @@ const punchDuty = async () => {
       console.log('')
       console.log(colors.green('[7/7] 🍻  打卡完成!!!'))
       console.log('')
+      console.log('punchResult', punchResult)
     } else {
       if (!program.devtools) {
         await browser.close()
@@ -164,7 +176,9 @@ const punchDuty = async () => {
       console.log('')
       console.log(colors.red('[7/7] 🚨  打卡失敗: ' + res))
       console.log('')
+      console.log('punchResult', punchResult)
     }
+    return punchResult
   })
 }
 
