@@ -97,13 +97,13 @@ const punchDuty = async () => {
   });
   await navigationPromise;
 
-  await page.waitForSelector(menuBtn);
+  await page.waitForSelector(menuBtn, {timeout: 0});
   await page.click(menuBtn);
   console.log('[4/7] ⚡️  開啟: 我要打卡')
 
   // Duty
   console.log('[5/7] ✨  點擊: 上/下班 按鈕')
-  await page.waitForSelector(dutyBtn);
+  await page.waitForSelector(dutyBtn, {timeout: 0});
   await page.click(dutyBtn);
 
   const waitResult = async (result) => {
