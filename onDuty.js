@@ -57,7 +57,6 @@ const punchDuty = async () => {
   console.log(`${colors.yellow('env 目前設定:')}
   userName = ${colors.green(userName)}
   password = ${colors.green('*'.repeat(password.length))}
-  password = ${colors.green(password)}
   loginUrl = ${colors.green(loginUrl)}
   `)
   const launchOptions = {
