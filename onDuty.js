@@ -84,6 +84,9 @@ const punchDuty = async () => {
   console.log('[2/7] ⚡️  輸入帳密')
   console.log(' └─ userName: ' + userName)
   console.log(' └─ password: ' + '*'.repeat(password.length))
+
+  await page.waitForNavigation({ waitUntil: 'networkidle0' });
+
   await page.type('input[name="userName"]', userName);
   await page.type('input[name="password"]', password);
   await page.click('button[type="submit"]');
