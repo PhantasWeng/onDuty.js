@@ -1,6 +1,6 @@
 {
-  "name": "onDutyJs",
-  "version": "1.3.1",
+  "name": "on-duty-js",
+  "version": "1.4.0",
   "description": "onDuty for tubeHR (Apollo XE)",
   "author": "Phantasweng <bensonuong@gmail.com>",
   "main": "onDuty.js",
@@ -14,5 +14,9 @@
     "date-fns": "^1.29.0",
     "dotenv": "^6.0.0",
     "puppeteer": "^1.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PhantasWeng/onDuty.js"
   }
 }
