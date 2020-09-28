@@ -1,7 +1,8 @@
+const osascript = require('osascript').eval;
 require('dotenv').config();
-const program = require('commander')
+const program = require('commander');
 const puppeteer = require('puppeteer');
-const { TimeoutError } = require('puppeteer/Errors')
+const { TimeoutError } = require('puppeteer/Errors');
 const dateFns = require('date-fns');
 const colors = require('colors');
 
@@ -178,6 +179,8 @@ const punchDuty = async () => {
       console.log('')
       console.log('punchResult', punchResult)
     }
+    var script = `tell app "System Events" to display dialog "${punchResult.msg}" buttons {"OK"}`;
+    osascript(script, { type: 'AppleScript' });
     return punchResult
   })
 }

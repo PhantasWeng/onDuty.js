@@ -13,6 +13,7 @@
     "commander": "^2.19.0",
     "date-fns": "^1.29.0",
     "dotenv": "^6.0.0",
+    "osascript": "^1.2.0",
     "puppeteer": "^1.10.0"
   },
   "repository": {
