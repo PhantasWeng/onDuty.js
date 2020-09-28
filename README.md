@@ -30,3 +30,11 @@ Enter `npm run start --help` or `yarn start --help` to list argv.
 
 ### Usage
 [onDutySchedule](https://github.com/PhantasWeng/onDutySchedule) - A Timer for punch apollo XE
+
+### Mac Automator
+Create Automator script - shell workflow
+```
+cd {to-your-folder};
+{node path}/node onDuty.js;
+```
+
