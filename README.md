@@ -33,8 +33,18 @@ Enter `npm run start --help` or `yarn start --help` to list argv.
 
 ### Mac Automator
 Create Automator script - shell workflow
+
 ```
 cd {to-your-folder};
 {node path}/node onDuty.js;
 ```
 
+Then, make script to app.
+After all, you can map your keyboard shortcut or any key to open the app.
+
+Automator will give a punch and tell you if success or not.
+
+## TODO
+- Message on Automator start.
+- Progress/Rolling status.
+- Argument of GUI.
