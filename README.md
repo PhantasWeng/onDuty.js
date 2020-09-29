@@ -31,6 +31,10 @@ Enter `npm run start --help` or `yarn start --help` to list argv.
 ### Usage
 [onDutySchedule](https://github.com/PhantasWeng/onDutySchedule) - A Timer for punch apollo XE
 
+### With osascript
+You will get notifications when punching. and a result alert with status at the end of process.
+![Automator-notification](automator-notification.png)
+
 ### Mac Automator
 Create Automator script - shell workflow
 
