@@ -44,6 +44,8 @@ After all, you can map your keyboard shortcut or any key to open the app.
 
 Automator will give a punch and tell you if success or not.
 
+![Automator](Automator.png)
+
 ## TODO
 - Message on Automator start.
 - Progress/Rolling status.
