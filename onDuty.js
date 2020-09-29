@@ -50,6 +50,7 @@ function setConfig (data) {
 }
 
 const punchDuty = async () => {
+  osascript(`display notification "Punch Start" with title "OnDuty.js" sound name "Submarine"`, { type: 'AppleScript' });
   var punchResult = {
     status: null,
     msg: '',
@@ -93,6 +94,7 @@ const punchDuty = async () => {
     if (response.url().endsWith('Token') === true) {
       if (response._status === 200) {
         console.log('[3/7] ✨  登入成功')
+        osascript(`display notification "✨ 登入成功" with title "OnDuty.js" sound name "Submarine"`, { type: 'AppleScript' });
       }
     }
   });
@@ -101,9 +103,11 @@ const punchDuty = async () => {
   await page.waitForSelector(menuBtn, {timeout: 0});
   await page.click(menuBtn);
   console.log('[4/7] ⚡️  開啟: 我要打卡')
+  osascript(`display notification "⚡️ 開啟: 我要打卡" with title "OnDuty.js" sound name "Submarine"`, { type: 'AppleScript' });
 
   // Duty
   console.log('[5/7] ✨  點擊: 上/下班 按鈕')
+  osascript(`display notification "✨ 點擊: 上/下班 按鈕" with title "OnDuty.js" sound name "Submarine"`, { type: 'AppleScript' });
   await page.waitForSelector(dutyBtn, {timeout: 0});
   await page.click(dutyBtn);
 
@@ -179,7 +183,8 @@ const punchDuty = async () => {
       console.log('')
       console.log('punchResult', punchResult)
     }
-    var script = `tell app "System Events" to display dialog "${punchResult.msg}" buttons {"OK"}`;
+    osascript('beep 1', { type: 'AppleScript' })
+    var script = `display alert "🤪 onDuty.js - ${punchResult.msg}" buttons {"OK"}`;
     osascript(script, { type: 'AppleScript' });
     return punchResult
   })
