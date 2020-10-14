@@ -54,11 +54,11 @@ const punchDuty = async () => {
     msg: '',
     time: ''
   }
-  console.log(`${colors.yellow('env 目前設定:')}
-  userName = ${colors.green(userName)}
-  password = ${colors.green('*'.repeat(password.length))}
-  loginUrl = ${colors.green(loginUrl)}
-  `)
+  // console.log(`${colors.yellow('env 目前設定:')}
+  // userName = ${colors.green(userName)}
+  // password = ${colors.green('*'.repeat(password.length))}
+  // loginUrl = ${colors.green(loginUrl)}
+  // `)
   const launchOptions = {
     headless: program.watch ? false : true,
     devtools: program.devtools ? true : false,
@@ -165,18 +165,18 @@ const punchDuty = async () => {
       if (!program.devtools) {
         await browser.close()
       }
-      console.log('')
-      console.log(colors.green('[7/7] 🍻  打卡完成!!!'))
-      console.log('')
-      console.log('punchResult', punchResult)
+      // console.log('')
+      console.log('[7/7] 🍻  打卡完成!!!')
+      // console.log('')
+      // console.log('punchResult', punchResult)
     } else {
       if (!program.devtools) {
         await browser.close()
       }
-      console.log('')
-      console.log(colors.red('[7/7] 🚨  打卡失敗: ' + res))
-      console.log('')
-      console.log('punchResult', punchResult)
+      // console.log('')
+      console.log('[7/7] 🚨  打卡失敗: ' + res)
+      // console.log('')
+      // console.log('punchResult', punchResult)
     }
     return punchResult
   })
