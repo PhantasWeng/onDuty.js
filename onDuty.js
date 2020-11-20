@@ -192,7 +192,13 @@ const punchDuty = async () => {
 
 
 if ('require', require.main === module) {
-  punchDuty()
+  // this module was run directly from the command line as in node xxx.js
+  var script = `tell app "System Events" to display dialog "⚠️ Are You Sure to Punch?" buttons {"Yes", "No"} default button "No"`;
+  const a = osascript(script, { type: 'AppleScript' }, function (err, data) {
+    if (data === 'button returned:Yes\n') {
+      punchDuty()
+    }
+  });
 }
 
 module.exports.start = punchDuty
