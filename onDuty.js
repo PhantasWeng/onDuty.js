@@ -87,7 +87,7 @@ const punchDuty = async () => {
 
   await page.type('input[name="userName"]', userName);
   await page.type('input[name="password"]', password);
-  await page.click('button[type="submit"]');
+  await page.click('.loginform > button');
   await page.on('response', response => {
     if (response.url().endsWith('Token') === true) {
       if (response._status === 200) {
