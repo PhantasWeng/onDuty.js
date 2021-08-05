@@ -6,17 +6,23 @@
   "main": "onDuty.js",
   "license": "MIT",
   "scripts": {
-    "start": "node onDuty.js"
+    "start": "node onDuty.js",
+    "dev": "rollup src/index.js --file bundle.js --format umd --name 'onDutyJs' && node bundle.js"
   },
   "dependencies": {
+    "chalk": "^4.1.2",
+    "chalkk": "^0.0.1-security",
     "colors": "^1.3.2",
-    "commander": "^2.19.0",
+    "commander": "^8.1.0",
     "date-fns": "^1.29.0",
-    "dotenv": "^6.0.0",
+    "dotenv": "^10.0.0",
     "puppeteer": "^1.10.0"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PhantasWeng/onDuty.js"
+  },
+  "devDependencies": {
+    "rollup": "^2.56.0"
   }
 }
