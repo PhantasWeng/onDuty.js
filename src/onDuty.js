@@ -187,5 +187,22 @@ if ('require', require.main === module) {
   punchDuty()
 }
 
+async function test () {
+  return new Promise((resolve, reject) => {
+    const testCase = Math.round(Math.random())
+    console.log('test case:', testCase, Date.now())
+    if (testCase) {
+      return resolve(Date.now())
+    } else {
+      return reject('error')
+    }
+    // setTimeout(() => {
+    //   console.log('wait')
+    //   return resolve(Date.now())
+    // }, 3000)
+  })
+}
+
+module.exports.test = test
 module.exports.start = punchDuty
 module.exports.config = setConfig

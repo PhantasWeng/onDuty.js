@@ -7,7 +7,9 @@
   "license": "MIT",
   "scripts": {
     "start": "node onDuty.js",
-    "dev": "rollup src/index.js --file bundle.js --format umd --name 'onDutyJs' && node bundle.js"
+    "build:server": "rollup server/index.js --file bundle.js --format umd --name 'onDutyJs'",
+    "build:js": "rollup src/index.js --file bundle.js --format umd --name 'onDutyJs'",
+    "serve": "yarn build:server && node bundle.js"
   },
   "dependencies": {
     "chalk": "^4.1.2",
@@ -16,7 +18,9 @@
     "commander": "^8.1.0",
     "date-fns": "^1.29.0",
     "dotenv": "^10.0.0",
-    "puppeteer": "^1.10.0"
+    "express": "^4.17.1",
+    "puppeteer": "^1.10.0",
+    "rollup-plugin-livereload": "^2.0.5"
   },
   "repository": {
     "type": "git",

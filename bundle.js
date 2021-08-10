@@ -1,59 +1,36 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('dotenv'), require('chalk')) :
-  typeof define === 'function' && define.amd ? define(['dotenv', 'chalk'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.dotenv, global.chalk));
-}(this, (function (dotenv, chalk) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('express')) :
+  typeof define === 'function' && define.amd ? define(['express'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.express));
+}(this, (function (express) { 'use strict';
 
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-  var dotenv__default = /*#__PURE__*/_interopDefaultLegacy(dotenv);
-  var chalk__default = /*#__PURE__*/_interopDefaultLegacy(chalk);
+  var express__default = /*#__PURE__*/_interopDefaultLegacy(express);
 
-  var logger = {
-    log: message => console.log(message),
-    success : message => console.log(chalk__default['default'].green(message)),
-    error : message => console.log(chalk__default['default'].red(message))
-  };
+  // import onDuty from '../src/onDuty'
+  const onDuty = require('./src/onDuty');
 
-  dotenv__default['default'].config();
+  const app = express__default['default']();
+  const port = 3000;
 
-  const env = {
-    loginUrl: process.env.loginUrl,
-    userName: process.env.userName,
-    password: process.env.password
-  };
+  app.get('/health', (req, res) => {
+    res.end('onDuty is online!');
+  });
 
-  function isValid () {
-    const notFilled = [];
-    for (const [key, value] of Object.entries(env)) {
-      if (typeof value === 'undefined') {
-        notFilled.push(key);
-      }
-    }
-    if (notFilled.length > 0) {
-      logger.error(`[Error] Please fill ${notFilled.join(', ')} in .env file.`);
-    }
-    return notFilled.length === 0
-  }
+  app.post('/punch', (req, res) => {
+    console.log('Start Punch');
+    onDuty.test().then(response => {
+      res.type('json').send({
+        status: response
+      });
+    }).catch(error => {
+      res.status(500).end(error);
+    });
+  });
 
-  var env$1 = isValid() ? env : undefined;
-
-  // import logger from './logger'
-
-  const defaultOptions = {
-    env: env$1,
-    browser: {
-      headless: true,
-      devtools: false,
-      args: ['--window-size=400,760', '--no-sandbox'],
-      slowMo: 0
-    }
-  };
-
-  const config = {
-    ...defaultOptions
-  };
-
-  console.log(config);
+  app.listen(port, () => {
+    console.log(`app listening at http://localhost:${port}`);
+  });
 
 })));
