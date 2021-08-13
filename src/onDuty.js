@@ -151,15 +151,7 @@ const punchDuty = async () => {
     }
   }
 
-  // const dimensions = await page.evaluate(() => {
-  //   return {
-  //     width: document.documentElement.clientWidth,
-  //     height: document.documentElement.clientHeight,
-  //     deviceScaleFactor: window.devicePixelRatio
-  //   };
-  // });
-  // console.log('Dimensions:', dimensions);
-  return await waitResult().then( async res => {
+  await waitResult().then( async res => {
     if (res === true) {
       await page.screenshot({path: './screenshots/' + dateFns.format(new Date, 'YYYY-MM-DD HH:mm:ss') + '.jpg'});
       if (!program.devtools) {
@@ -180,6 +172,7 @@ const punchDuty = async () => {
     }
     return punchResult
   })
+  return punchResult
 }
 
 
@@ -192,7 +185,9 @@ async function test () {
     const testCase = Math.round(Math.random())
     console.log('test case:', testCase, Date.now())
     if (testCase) {
-      return resolve(Date.now())
+      return resolve({
+        timestamp: Date.now()
+      })
     } else {
       return reject('error')
     }

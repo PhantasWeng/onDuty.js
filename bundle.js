@@ -8,21 +8,38 @@
 
   var express__default = /*#__PURE__*/_interopDefaultLegacy(express);
 
+  // import bodyParser from 'body-parser'
+  const bodyParser = require('body-parser');
+
   // import onDuty from '../src/onDuty'
   const onDuty = require('./src/onDuty');
 
   const app = express__default['default']();
   const port = 3000;
 
+  app.use(bodyParser.json());
+
   app.get('/health', (req, res) => {
     res.end('onDuty is online!');
   });
 
-  app.post('/punch', (req, res) => {
-    console.log('Start Punch');
+  app.post('/test', (req, res) => {
     onDuty.test().then(response => {
       res.type('json').send({
-        status: response
+        ...response,
+        data: req.body
+      });
+    }).catch(error => {
+      res.status(500).end(error);
+    });
+  });
+
+  app.post('/punch', (req, res) => {
+    console.log('Start Punch');
+    onDuty.start().then(response => {
+      console.log('response', response);
+      res.type('json').send({
+        ...response
       });
     }).catch(error => {
       res.status(500).end(error);
