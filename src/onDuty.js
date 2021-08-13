@@ -42,13 +42,25 @@ program
     console.log('')
   }
 
+program.devtools = true
+program.watch = true
+
 function setConfig (data) {
   userName = data.userName
   password = data.password
   loginUrl = data.loginUrl
 }
 
+let isPunching = 0
 const punchDuty = async () => {
+  if (isPunching === 1) {
+    return {
+      status: 'failed',
+      msg: '[錯誤] 上一個API尚未完成，請勿連續發送',
+      time: dateFns.format(Date.now(),  'YYYY-MM-DD HH:mm:ss')
+    }
+  }
+  isPunching = 1
   var punchResult = {
     status: null,
     msg: '',
@@ -108,43 +120,35 @@ const punchDuty = async () => {
 
   const waitResult = async (result) => {
     try {
-      const finalResponse = await page.waitForResponse( response => {
-        if (response.url().endsWith('web') && response.request().method() === 'POST') {
-          if (response.status() === 200) {
-            return response.json().then( text => {
-              // punchType: 1 上班
-              // punchType: 2 下班
-              // punchDate 打卡時間
-              // LocationName 打卡地點
-              let myPunchType = ''
-              if (text.Data.punchType === 1) { myPunchType = '上班' }
-              if (text.Data.punchType === 2) { myPunchType = '下班' }
-              console.log('[6/7] 🎉   ' + '打卡成功 @ ' + text.Data.LocationName)
-              console.log(' └─ [' + myPunchType + '] 打卡時間: ' + dateFns.format(text.Data.punchDate,  'YYYY-MM-DD HH:mm:ss'))
-              punchResult.status = true
-              punchResult.msg = '[' + myPunchType + '] 打卡成功'
-              punchResult.time = dateFns.format(text.Data.punchDate,  'YYYY-MM-DD HH:mm:ss')
-            })
-          } else {
-            return response.json().then( text => {
-              console.log('[6/7] 🚧  ' + response.status() + ': ' + text.Error.Title)
-            })
-          }
-        }
+      const finalResponse = await page.waitForResponse((response) => {
+        return response.url().endsWith('web') && response.request().method() === 'POST'
       }, {timeout: 10000})
+
+      console.log('finalResponse', finalResponse, finalResponse.ok())
+      const jsonBody = await finalResponse.json()
+      const textBody = await finalResponse.text()
       if (finalResponse.ok()) {
+        console.log('ok')
+        console.log('jsonBody', jsonBody)
+        // console.log('textBody', textBody)
+        punchResult.status = 'success'
+        punchResult.msg = `[成功] ${jsonBody.Data.punchType === 1 ? '上班' : '下班'}@${jsonBody.Data.LocationName}`
+        punchResult.time = dateFns.format(Date.now(),  'YYYY-MM-DD HH:mm:ss')
         return finalResponse.ok()
       } else {
-        let msg = ''
-        await finalResponse.json().then(text => msg = text.Error.Title)
-        return finalResponse.status() + ': ' + msg
+        console.log('error')
+        console.log('jsonBody', jsonBody)
+        console.log('textBody', textBody)
+        punchResult.status = 'failed'
+        punchResult.msg = '[錯誤] ' + jsonBody.Error.Title
+        punchResult.time = dateFns.format(Date.now(),  'YYYY-MM-DD HH:mm:ss')
       }
     } catch (e) {
       if (e instanceof TimeoutError) {
         // Do something if this is a timeout.
-        console.log('[6/7] 🚧  ' + '打卡失敗: ' + dateFns.format(Date.now(),  'YYYY-MM-DD HH:mm:ss'))
-        punchResult.status = false
-        punchResult.msg = '打卡失敗'
+        console.log('[6/7] 🚧  ' + 'API Timeout: ' + dateFns.format(Date.now(),  'YYYY-MM-DD HH:mm:ss'))
+        punchResult.status = 'failed'
+        punchResult.msg = '打卡失敗 [API Timeout]'
         punchResult.time = dateFns.format(Date.now(),  'YYYY-MM-DD HH:mm:ss')
         return e.message
       }
@@ -158,7 +162,7 @@ const punchDuty = async () => {
         await browser.close()
       }
       console.log('')
-      console.log(colors.green('[7/7] 🍻  打卡完成!!!'))
+      console.log(colors.green('[7/7] 🍻  打卡完成!!!' + `${punchResult.msg} ${punchResult.time}`))
       console.log('')
       console.log('punchResult', punchResult)
     } else {
@@ -166,10 +170,11 @@ const punchDuty = async () => {
         await browser.close()
       }
       console.log('')
-      console.log(colors.red('[7/7] 🚨  打卡失敗: ' + res))
+      console.log(colors.red('[7/7] 🚨  ' + `${punchResult.msg} ${punchResult.time}`))
       console.log('')
       console.log('punchResult', punchResult)
     }
+    isPunching = 0
     return punchResult
   })
 }
