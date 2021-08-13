@@ -9,7 +9,8 @@
     "start": "node onDuty.js",
     "build:server": "rollup server/index.js --file bundle.js --format umd --name 'onDutyJs'",
     "build:js": "rollup src/index.js --file bundle.js --format umd --name 'onDutyJs'",
-    "serve": "yarn build:server && node bundle.js"
+    "serve": "yarn build:server && node bundle.js",
+    "server": "yarn build:server && yarn pm2 start bundle.js"
   },
   "dependencies": {
     "chalk": "^4.1.2",
@@ -27,6 +28,7 @@
     "url": "git+https://github.com/PhantasWeng/onDuty.js"
   },
   "devDependencies": {
+    "pm2": "^5.1.0",
     "rollup": "^2.56.0"
   }
 }
