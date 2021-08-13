@@ -42,8 +42,8 @@ program
     console.log('')
   }
 
-program.devtools = true
-program.watch = true
+// program.devtools = true
+// program.watch = true
 
 function setConfig (data) {
   userName = data.userName
@@ -201,3 +201,4 @@ async function test () {
 module.exports.test = test
 module.exports.start = punchDuty
 module.exports.config = setConfig
+
