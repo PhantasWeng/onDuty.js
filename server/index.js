@@ -34,6 +34,7 @@ app.post('/punch', (req, res) => {
       ...response
     })
   }).catch(error => {
+    console.log('error', error)
     res.status(500).end(error)
   })
 })

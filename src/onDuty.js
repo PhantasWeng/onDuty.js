@@ -151,9 +151,9 @@ const punchDuty = async () => {
     }
   }
 
-  await waitResult().then( async res => {
+  return await waitResult().then( async res => {
     if (res === true) {
-      await page.screenshot({path: './screenshots/' + dateFns.format(new Date, 'YYYY-MM-DD HH:mm:ss') + '.jpg'});
+      // await page.screenshot({path: './screenshots/' + dateFns.format(new Date, 'YYYY-MM-DD HH:mm:ss') + '.jpg'});
       if (!program.devtools) {
         await browser.close()
       }
@@ -172,7 +172,6 @@ const punchDuty = async () => {
     }
     return punchResult
   })
-  return punchResult
 }
 
 
@@ -191,10 +190,6 @@ async function test () {
     } else {
       return reject('error')
     }
-    // setTimeout(() => {
-    //   console.log('wait')
-    //   return resolve(Date.now())
-    // }, 3000)
   })
 }
 

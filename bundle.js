@@ -15,7 +15,7 @@
   const onDuty = require('./src/onDuty');
 
   const app = express__default['default']();
-  const port = 3000;
+  const port = 30678;
 
   app.use(bodyParser.json());
 
@@ -42,6 +42,7 @@
         ...response
       });
     }).catch(error => {
+      console.log('error', error);
       res.status(500).end(error);
     });
   });
