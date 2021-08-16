@@ -28,10 +28,14 @@ app.post('/test', (req, res) => {
 
 app.post('/punch', (req, res) => {
   console.log('Start Punch')
+  onDuty.config(req.body)
   onDuty.start().then(response => {
     console.log('response', response)
     res.type('json').send({
-      ...response
+      ...response,
+      user: {
+        ...req.body
+      }
     })
   }).catch(error => {
     console.log('error', error)

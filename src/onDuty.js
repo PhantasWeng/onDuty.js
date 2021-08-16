@@ -46,17 +46,18 @@ program
 // program.watch = true
 
 function setConfig (data) {
-  userName = data.userName
-  password = data.password
-  loginUrl = data.loginUrl
+  userName = data.userName ? data.userName : process.env.userName
+  password = data.password ? data.password : process.env.password
+  loginUrl = data.loginUrl ? data.loginUrl : process.env.loginUrl
 }
 
 let isPunching = 0
 const punchDuty = async () => {
+  if (!userName || !password || !loginUrl) return Promise.reject('請填寫帳號密碼')
   if (isPunching === 1) {
     return {
       status: 'failed',
-      msg: '[錯誤] 上一個API尚未完成，請勿連續發送',
+      msg: '[錯誤] 上一個API尚未完成，請稍後再試',
       time: dateFns.format(Date.now(),  'YYYY-MM-DD HH:mm:ss')
     }
   }

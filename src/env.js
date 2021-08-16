@@ -23,3 +23,4 @@ function isValid () {
 }
 
 export default isValid() ? env : undefined
+module.exports.envValid = isValid
