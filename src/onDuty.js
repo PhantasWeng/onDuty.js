@@ -23,27 +23,30 @@ program
   // loginUrl = ${colors.green(loginUrl)}
   // `)
   // });
-  if(!process.argv.slice(2).length) {
-    program.outputHelp(text => colors.grey(text));
-  }
-  program.parse(process.argv)
+if(!process.argv.slice(2).length) {
+  program.outputHelp(text => colors.grey(text));
+}
 
-  if(process.argv.slice(2).length) {
-    console.log('')
-    if (program.punch) {
-      if (program.punch === true) {
-        console.log(colors.grey('--punch'), colors.red('[無參數設置] 預設為: 打卡'))
-      } else {
-        console.log(colors.grey('--punch'), colors.green(program.punch))
-      }
+program.parse(process.argv)
+
+const args = program._optionValues
+
+if(process.argv.slice(2).length) {
+  console.log('')
+  if (args.punch) {
+    if (args.punch === true) {
+      console.log(colors.grey('--punch'), colors.red('[無參數設置] 預設為: 打卡'))
+    } else {
+      console.log(colors.grey('--punch'), colors.green(args.punch))
     }
-    if (program.devtools) console.log(colors.grey('--devtools:'), colors.green(program.devtools))
-    if (program.watch) console.log(colors.grey('--watch:'), colors.green(program.watch))
-    console.log('')
   }
+  if (args.devtools) console.log(colors.grey('--devtools:'), colors.green(args.devtools))
+  if (args.watch) console.log(colors.grey('--watch:'), colors.green(args.watch))
+  console.log('')
+}
 
-// program.devtools = true
-// program.watch = true
+// args.devtools = true
+// args.watch = true
 
 function setConfig (data) {
   userName = data.userName ? data.userName : process.env.userName
@@ -73,16 +76,17 @@ const punchDuty = async () => {
   loginUrl = ${colors.green(loginUrl)}
   `)
   const launchOptions = {
-    headless: program.watch ? false : true,
-    devtools: program.devtools ? true : false,
-    args: program.devtools ? ['--window-size=1920,1080'] : ['--window-size=400,760', '--no-sandbox'],
-    slowMo: program.watch ? 30 : 0,
+    headless: args.watch ? false : true,
+    devtools: args.devtools ? true : false,
+    args: args.devtools ? ['--window-size=1920,1080'] : ['--window-size=400,760', '--no-sandbox'],
+    slowMo: args.watch ? 30 : 0,
   }
 
   console.log('[1/7] ⚡️  開始自動打卡')
   const browser = await puppeteer.launch(launchOptions);
   const page = await browser.newPage();
-  if (!program.devtools) {
+  await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36');
+  if (!args.devtools) {
     await page.setViewport({width: 400, height: 720});
   } else {
     await page.setViewport({width: 1336, height: 900});
@@ -159,7 +163,7 @@ const punchDuty = async () => {
   return await waitResult().then( async res => {
     if (res === true) {
       // await page.screenshot({path: './screenshots/' + dateFns.format(new Date, 'YYYY-MM-DD HH:mm:ss') + '.jpg'});
-      if (!program.devtools) {
+      if (!args.devtools) {
         await browser.close()
       }
       console.log('')
@@ -167,7 +171,7 @@ const punchDuty = async () => {
       console.log('')
       console.log('punchResult', punchResult)
     } else {
-      if (!program.devtools) {
+      if (!args.devtools) {
         await browser.close()
       }
       console.log('')

@@ -1,17 +1,19 @@
 {
   "name": "on-duty-js",
-  "version": "1.4.2",
+  "version": "3.0.0",
   "description": "onDuty for tubeHR (Apollo XE)",
   "author": "Phantasweng <bensonuong@gmail.com>",
   "main": "onDuty.js",
   "license": "MIT",
   "scripts": {
-    "start": "node onDuty.js",
+    "start": "node src/onDuty.js",
     "build:server": "rollup server/index.js --file bundle.js --format umd --name 'onDutyJs'",
     "build:js": "rollup src/index.js --file bundle.js --format umd --name 'onDutyJs'",
     "serve": "yarn build:server && node bundle.js",
-    "server": "yarn build:server && yarn pm2 start bundle.js --name 'onDutyJsApi'",
-    "restart": "yarn pm2 delete onDutyJsApi && yarn pm2 start bundle.js --name 'onDutyJsApi' "
+    "server": "yarn build:server && yarn pm2 start bundle.js --name 'onDutyJsApi'; yarn tunnel",
+    "restart": "yarn pm2 delete onDutyJsApi && yarn server",
+    "stop": "yarn pm2 delete onDutyJsApi",
+    "tunnel": "./ssh_tunnel.sh"
   },
   "dependencies": {
     "chalk": "^4.1.2",
