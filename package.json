@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "description": "onDuty for tubeHR (Apollo XE)",
   "author": "Phantasweng <bensonuong@gmail.com>",
-  "main": "onDuty.js",
+  "main": "bundle.js",
   "license": "MIT",
   "scripts": {
     "start": "node src/onDuty.js",
