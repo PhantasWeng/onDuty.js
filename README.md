@@ -28,5 +28,3 @@ Enter `npm run start --help` or `yarn start --help` to list argv.
 -w, --watch: 察看 UI 介面
 ```
 
-### Usage
-[onDutySchedule](https://github.com/PhantasWeng/onDutySchedule) - A Timer for punch apollo XE
