@@ -2,7 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('express')) :
   typeof define === 'function' && define.amd ? define(['express'], factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.express));
-}(this, (function (express) { 'use strict';
+})(this, (function (express) { 'use strict';
 
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -14,7 +14,7 @@
   // import onDuty from '../src/onDuty'
   const onDuty = require('./src/onDuty');
 
-  const app = express__default['default']();
+  const app = express__default["default"]();
   const port = 30678;
 
   app.use(bodyParser.json());
@@ -55,4 +55,4 @@
     console.log(`app listening at http://localhost:${port}`);
   });
 
-})));
+}));
